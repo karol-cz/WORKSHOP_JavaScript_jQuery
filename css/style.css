@@ -1,0 +1,20 @@
+#div_list, #div_add {
+    border: solid 1px grey;
+    width: 250px;
+    padding: 10px;
+    margin: auto;
+}
+
+.title {
+    display: inline-block;
+    cursor: pointer;
+    color: grey;
+}
+
+body {
+    font-family: "Arial";
+}
+
+delete_book_button_class {
+    float: left;
+}
