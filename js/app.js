@@ -3,7 +3,7 @@ $(document).ready(function() {
 });
 
 function getAllBooks() {
-    var url = "http://localhost:8282/books";
+    var url = "http://localhost:8080/Warsztaty5/books";
     ajaxRequest(url, createBookList);
 }
 
@@ -25,7 +25,7 @@ function createBookList(result) {
 
         var titleAndButtonDiv = $('<div>');
         titleAndButtonDiv.addClass('books_list_line');
-        titleAndButtonDiv.attr('id', $(result).eq(i).attr('id'));
+        titleAndButtonDiv.attr('id', result[i].id);
         titleAndButtonDiv.append(deleteButton);
         titleAndButtonDiv.append(titleDiv);
         titleAndButtonDiv.append(descriptionDiv);
@@ -37,29 +37,30 @@ function createBookList(result) {
 
 $('#div_list').one('click', '.title', showBookDetails);
 
+
 function showBookDetails() {
     var bookDescriptionDiv = $(this).parent().find('.description_div_class');
-    var url = "http://localhost:8282/books/" + $(this).attr('data-id');
+    var url = "http://localhost:8080/Warsztaty5/books/" + $(this).attr('data-id');
     ajaxRequest(url, fillBookDetails, "GET", "", bookDescriptionDiv);
-    $('body').one('click', '.title', hideBookDetails);
+    $('#div_list').one('click', '.title', hideBookDetails);
 }
 
 function hideBookDetails() {
     $(this).parent().find('.description_div_class').html('<br>');
-    $('body').one('click', '.title', showBookDetails);
+    $('#div_list').one('click', '.title', showBookDetails);
 }
 
 function fillBookDetails(result, element) {
     var detailInfo = '';
-    jQuery.each(result, function(i, val) {
-        detailInfo += i + ': ' + val + '<br>';
+    jQuery.each(result, function(property, val) {
+        detailInfo += property + ': ' + val + '<br>';
     });
     detailInfo += '<br>';
     element.html(detailInfo);
 }
 
 $('#div_list').on('click', '.delete_book_button_class', function() {
-    url = "http://localhost:8282/books/remove/" + $(this).attr('data-id');
+    url = "http://localhost:8080/Warsztaty5/books/" + $(this).attr('data-id');
     ajaxRequest(url, getAllBooks, 'DELETE');
 });
 
@@ -73,7 +74,7 @@ $('[type="submit"]').on('click', function(event) {
         "publisher": form.find('input[name="publisher"]').val(),
         "type": form.find('input[name="text"]').val()
     };
-    url = "http://localhost:8282/books/add";
+    url = "http://localhost:8080/Warsztaty5/books";
     ajaxRequest(url, clearForm, 'POST', json);
 });
 
@@ -92,6 +93,7 @@ function ajaxRequest(url, callback, method, json, element) {
             },
             url: url,
             type: method || 'GET',
+            crossDomain:true,
             data: JSON.stringify(json)
         })
         .done(function(result) {
